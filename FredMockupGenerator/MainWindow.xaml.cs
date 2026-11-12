@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -13,6 +14,11 @@ namespace FredMockupGenerator;
 
 public partial class MainWindow : Window
 {
+  private static readonly string WindowSettingsPath = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+    "FredMockupGenerator",
+    "window.json");
+
   private static readonly string[] FirstNames =
   [
     "Camille", "Lucas", "Jules", "Manon", "Ines", "Hugo", "Lea", "Adam",
@@ -51,6 +57,8 @@ public partial class MainWindow : Window
   public MainWindow()
   {
     InitializeComponent();
+    CenterOnPrimaryScreen();
+    RestoreWindowPlacement();
     AddVersionNumberToTitle();
     DataContext = this;
 
@@ -82,6 +90,120 @@ public partial class MainWindow : Window
     Fields.Add(new FieldDefinition("email", "Email"));
     Fields.Add(new FieldDefinition("ville", "Ville"));
     PreviewStatusText.Text = "Configurez vos champs puis générez un aperçu.";
+  }
+
+  private void RestoreWindowPlacement()
+  {
+    if (!File.Exists(WindowSettingsPath))
+    {
+      return;
+    }
+
+    WindowPlacement? placement;
+    try
+    {
+      placement = JsonSerializer.Deserialize<WindowPlacement>(File.ReadAllText(WindowSettingsPath));
+    }
+    catch (JsonException exception)
+    {
+      ShowWindowSettingsWarning($"Les paramètres de position de la fenêtre sont invalides et seront ignorés.\n\n{exception.Message}");
+      return;
+    }
+    catch (IOException exception)
+    {
+      ShowWindowSettingsWarning($"Les paramètres de position de la fenêtre n’ont pas pu être lus.\n\n{exception.Message}");
+      return;
+    }
+    catch (UnauthorizedAccessException exception)
+    {
+      ShowWindowSettingsWarning($"L’accès aux paramètres de position de la fenêtre est refusé.\n\n{exception.Message}");
+      return;
+    }
+
+    if (placement is null || !IsPlacementVisible(placement))
+    {
+      return;
+    }
+
+    Left = placement.Left;
+    Top = placement.Top;
+    Width = placement.Width;
+    Height = placement.Height;
+
+    if (placement.IsMaximized)
+    {
+      WindowState = WindowState.Maximized;
+    }
+  }
+
+  private void CenterOnPrimaryScreen()
+  {
+    var workArea = SystemParameters.WorkArea;
+    Left = workArea.Left + (workArea.Width - Width) / 2;
+    Top = workArea.Top + (workArea.Height - Height) / 2;
+  }
+
+  private bool IsPlacementVisible(WindowPlacement placement)
+  {
+    if (!double.IsFinite(placement.Left)
+      || !double.IsFinite(placement.Top)
+      || !double.IsFinite(placement.Width)
+      || !double.IsFinite(placement.Height)
+      || placement.Width < MinWidth
+      || placement.Height < MinHeight
+      || placement.Width > 10000
+      || placement.Height > 10000)
+    {
+      return false;
+    }
+
+    var screenLeft = SystemParameters.VirtualScreenLeft;
+    var screenTop = SystemParameters.VirtualScreenTop;
+    var screenRight = screenLeft + SystemParameters.VirtualScreenWidth;
+    var screenBottom = screenTop + SystemParameters.VirtualScreenHeight;
+    var visibleWidth = Math.Min(placement.Left + placement.Width, screenRight)
+      - Math.Max(placement.Left, screenLeft);
+
+    return visibleWidth >= Math.Min(100, placement.Width)
+      && placement.Top >= screenTop
+      && placement.Top + 40 <= screenBottom;
+  }
+
+  private void Window_Closing(object? sender, CancelEventArgs e)
+  {
+    var bounds = WindowState == WindowState.Normal
+      ? new Rect(Left, Top, Width, Height)
+      : RestoreBounds;
+    var placement = new WindowPlacement
+    {
+      Left = bounds.Left,
+      Top = bounds.Top,
+      Width = bounds.Width,
+      Height = bounds.Height,
+      IsMaximized = WindowState == WindowState.Maximized
+    };
+
+    try
+    {
+      var directory = Path.GetDirectoryName(WindowSettingsPath)
+        ?? throw new InvalidOperationException("Le dossier des paramètres est introuvable.");
+      Directory.CreateDirectory(directory);
+      File.WriteAllText(WindowSettingsPath, JsonSerializer.Serialize(placement));
+    }
+    catch (IOException exception)
+    {
+      ShowWindowSettingsWarning($"La position de la fenêtre n’a pas pu être sauvegardée.\n\n{exception.Message}");
+    }
+    catch (UnauthorizedAccessException exception)
+    {
+      ShowWindowSettingsWarning($"L’accès au dossier des paramètres est refusé.\n\n{exception.Message}");
+    }
+  }
+
+  private void ShowWindowSettingsWarning(string message)
+  {
+    MessageBox.Show(this, message, "Paramètres de la fenêtre",
+      MessageBoxButton.OK, MessageBoxImage.Warning);
   }
 
   private void AddVersionNumberToTitle()
@@ -283,6 +405,15 @@ public partial class MainWindow : Window
   private void UpdateColumnCount()
   {
     ColumnCountText.Text = Fields.Count == 1 ? "1 champ" : $"{Fields.Count} champs";
+  }
+
+  private sealed class WindowPlacement
+  {
+    public double Left { get; set; }
+    public double Top { get; set; }
+    public double Width { get; set; }
+    public double Height { get; set; }
+    public bool IsMaximized { get; set; }
   }
 }
 

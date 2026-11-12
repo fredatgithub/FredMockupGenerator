@@ -6,7 +6,8 @@
         Height="820"
         MinWidth="980"
         MinHeight="680"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual"
+        Closing="Window_Closing"
         Background="#F4F6FA"
         FontFamily="Segoe UI">
     <Window.Resources>
