@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -50,6 +51,7 @@ public partial class MainWindow : Window
   public MainWindow()
   {
     InitializeComponent();
+    AddVersionNumberToTitle();
     DataContext = this;
 
     Fields.CollectionChanged += (_, args) =>
@@ -80,6 +82,15 @@ public partial class MainWindow : Window
     Fields.Add(new FieldDefinition("email", "Email"));
     Fields.Add(new FieldDefinition("ville", "Ville"));
     PreviewStatusText.Text = "Configurez vos champs puis générez un aperçu.";
+  }
+
+  private void AddVersionNumberToTitle()
+  {
+    var version = Assembly.GetExecutingAssembly().GetName().Version;
+    if (version is not null)
+    {
+      Title += $" v{version.Major}.{version.Minor}.{version.Build}";
+    }
   }
 
   private void AddField_Click(object sender, RoutedEventArgs e)

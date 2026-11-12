@@ -1,1 +1,1 @@
-# FredMockupGenerator
+# Fred Mockup Generator
