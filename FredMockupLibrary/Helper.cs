@@ -2,7 +2,12 @@ namespace FredMockupLibrary
 {
   public static class Helper
   {
-    public static readonly string[] FrenchFirstNames =
+    public static readonly string[] FrenchMaleFirstNames =
+    [
+      "Camille", "Lucas", "Jules", "Manon", "Ines", "Hugo", "Lea", "Adam", "Sarah", "Louis", "Emma", "Gabriel", "Nina", "Arthur", "Chloe", "Sacha"
+    ];
+
+    public static readonly string[] FrenchFemaleFirstNames =
     [
       "Camille", "Lucas", "Jules", "Manon", "Ines", "Hugo", "Lea", "Adam", "Sarah", "Louis", "Emma", "Gabriel", "Nina", "Arthur", "Chloe", "Sacha"
     ];

@@ -317,7 +317,7 @@ public partial class MainWindow : Window
 
   private string GenerateValue(string type)
   {
-    var firstName = Pick(Helper.FrenchFirstNames);
+    var firstName = Pick(Helper.FrenchMaleFirstNames);
     var lastName = Pick(Helper.FrenchLastNames);
 
     return type switch
