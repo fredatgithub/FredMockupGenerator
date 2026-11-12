@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FredMockupGenerator", "Fred
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FredMockupLibrary", "FredMockupLibrary\FredMockupLibrary.csproj", "{AA18D6CC-5E5E-4553-8BAE-5E3BEEB55A14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FredMockupLibrary.Tests", "FredMockupLibrary.Tests\FredMockupLibrary.Tests.csproj", "{22E45C25-B77D-48FE-A8E5-59B4F2925B92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AA18D6CC-5E5E-4553-8BAE-5E3BEEB55A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA18D6CC-5E5E-4553-8BAE-5E3BEEB55A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA18D6CC-5E5E-4553-8BAE-5E3BEEB55A14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22E45C25-B77D-48FE-A8E5-59B4F2925B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22E45C25-B77D-48FE-A8E5-59B4F2925B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22E45C25-B77D-48FE-A8E5-59B4F2925B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22E45C25-B77D-48FE-A8E5-59B4F2925B92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
