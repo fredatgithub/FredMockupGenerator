@@ -9,40 +9,13 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using FredMockupLibrary;
 
 namespace FredMockupGenerator;
 
 public partial class MainWindow : Window
 {
-  private static readonly string WindowSettingsPath = Path.Combine(
-    AppContext.BaseDirectory,
-    "window.json");
-
-
-  private static readonly string[] FirstNames =
-  [
-    "Camille", "Lucas", "Jules", "Manon", "Ines", "Hugo", "Lea", "Adam",
-    "Sarah", "Louis", "Emma", "Gabriel", "Nina", "Arthur", "Chloe", "Sacha"
-  ];
-
-  private static readonly string[] LastNames =
-  [
-    "Martin", "Bernard", "Dubois", "Thomas", "Robert", "Richard", "Petit",
-    "Durand", "Leroy", "Moreau", "Simon", "Laurent", "Michel", "Garcia"
-  ];
-
-  private static readonly string[] Companies =
-  [
-    "Atelier Horizon", "Nova Conseil", "Maison Rivage", "Studio Lumen",
-    "Groupe Atlas", "Les Jardins Modernes", "Pixel & Co"
-  ];
-
-  private static readonly string[] Cities =
-  [
-    "Paris", "Lyon", "Bordeaux", "Nantes", "Lille", "Toulouse",
-    "Strasbourg", "Montpellier", "Rennes", "Grenoble"
-  ];
-
+  private static readonly string WindowSettingsPath = Path.Combine(AppContext.BaseDirectory, "window.json");
   private readonly Random _random = new();
   private DataTable? _generatedData;
 
@@ -344,8 +317,8 @@ public partial class MainWindow : Window
 
   private string GenerateValue(string type)
   {
-    var firstName = Pick(FirstNames);
-    var lastName = Pick(LastNames);
+    var firstName = Pick(Helper.FrenchFirstNames);
+    var lastName = Pick(Helper.FrenchLastNames);
 
     return type switch
     {
@@ -353,8 +326,8 @@ public partial class MainWindow : Window
       "Prénom" => firstName,
       "Nom" => lastName,
       "Email" => $"{firstName.ToLowerInvariant()}.{lastName.ToLowerInvariant()}{_random.Next(1, 1000)}@example.com",
-      "Entreprise" => Pick(Companies),
-      "Ville" => Pick(Cities),
+      "Entreprise" => Pick(Helper.FrenchCompanies),
+      "Ville" => Pick(Helper.FrenchCities),
       "Téléphone" => $"+33 6 {_random.Next(10, 100):D2} {_random.Next(10, 100):D2} {_random.Next(10, 100):D2} {_random.Next(10, 100):D2}",
       "Date" => DateTime.Today.AddDays(-_random.Next(0, 365 * 5 + 1)).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
       "Nombre" => _random.Next(1, 1001).ToString(CultureInfo.InvariantCulture),
@@ -405,78 +378,5 @@ public partial class MainWindow : Window
   private void UpdateColumnCount()
   {
     ColumnCountText.Text = Fields.Count == 1 ? "1 champ" : $"{Fields.Count} champs";
-  }
-
-  private sealed class WindowPlacement
-  {
-    public double Left { get; set; }
-    public double Top { get; set; }
-    public double Width { get; set; }
-    public double Height { get; set; }
-    public bool IsMaximized { get; set; }
-  }
-}
-
-public sealed class FieldDefinition : INotifyPropertyChanged
-{
-  private string _name;
-  private string _type;
-
-  public FieldDefinition(string name, string type)
-  {
-    _name = name;
-    _type = type;
-  }
-
-  public string Name
-  {
-    get => _name;
-    set => SetProperty(ref _name, value);
-  }
-
-  public string Type
-  {
-    get => _type;
-    set
-    {
-      if (SetProperty(ref _type, value))
-      {
-        OnPropertyChanged(nameof(Example));
-      }
-    }
-  }
-
-  public string Example => Type switch
-  {
-    "Identifiant" => "7c9e6679-…",
-    "Prénom" => "Camille",
-    "Nom" => "Martin",
-    "Email" => "camille.martin@example.com",
-    "Entreprise" => "Atelier Horizon",
-    "Ville" => "Lyon",
-    "Téléphone" => "+33 6 12 34 56 78",
-    "Date" => "2025-03-18",
-    "Nombre" => "42",
-    "Booléen" => "true / false",
-    _ => "Texte d’exemple"
-  };
-
-  public event PropertyChangedEventHandler? PropertyChanged;
-
-  private bool SetProperty(ref string field, string value, [System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-  {
-    if (field == value)
-    {
-      return false;
-    }
-
-    field = value;
-    OnPropertyChanged(propertyName);
-    return true;
-  }
-
-  private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
-  {
-    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
   }
 }
