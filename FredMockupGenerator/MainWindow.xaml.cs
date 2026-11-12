@@ -15,9 +15,9 @@ namespace FredMockupGenerator;
 public partial class MainWindow : Window
 {
   private static readonly string WindowSettingsPath = Path.Combine(
-    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-    "FredMockupGenerator",
+    AppContext.BaseDirectory,
     "window.json");
+
 
   private static readonly string[] FirstNames =
   [
