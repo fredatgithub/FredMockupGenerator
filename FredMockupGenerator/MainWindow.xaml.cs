@@ -306,7 +306,7 @@ public partial class MainWindow : Window
       Filter = "Fichier CSV (*.csv)|*.csv|Tous les fichiers (*.*)|*.*",
       DefaultExt = ".csv",
       AddExtension = true,
-      FileName = "donnees_generees.csv"
+      FileName = $"Generated_data_{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture)}.csv"
     };
 
     if (dialog.ShowDialog(this) != true)
