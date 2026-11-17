@@ -195,9 +195,26 @@ public class HelperTests
       {
         "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan",
         "Dorothy", "Lisa", "Nancy", "Karen", "Betty", "Helen", "Sandra",
-        "Ashley", "Kimberly", "Emily", "Donna"
+        "Ashley", "Kimberly", "Emily", "Donna", "Abigail", "Ada", "Addison",
+        "Adelaide", "Adriana", "Aileen", "Alexa", "Alexandra", "Alice", "Alicia",
+        "Alyssa", "Amanda", "Amber", "Amelia", "Amy", "Andrea", "Angela", "Anita",
+        "Ann", "Annabelle", "Anne", "Annie", "April", "Ariana", "Arlene", "Audrey",
+        "Autumn", "Ava", "Beatrice", "Bella", "Bethany", "Beverly", "Bianca", "Blair",
+        "Brenda", "Brianna", "Bridget", "Brooke", "Caitlin", "Callie", "Camila",
+        "Candace", "Carla", "Carly", "Carmen", "Carolyn", "Cassandra", "Catherine",
+        "Cecilia", "Celeste", "Charlotte", "Chelsea", "Cheryl", "Chloe", "Christina",
+        "Christine", "Claire", "Clara", "Claudia", "Colleen", "Cora", "Courtney",
+        "Crystal", "Cynthia", "Daisy", "Dana", "Danielle", "Deborah", "Deirdre",
+        "Delia", "Denise", "Diana", "Diane", "Dina", "Edith", "Eleanor", "Elena",
+        "Elise", "Ella", "Ellen", "Ellie", "Eliza", "Eloise", "Erica", "Erin",
+        "Esme", "Esther", "Eva", "Evelyn", "Faith", "Fiona", "Frances", "Gabriella",
+        "Gail", "Gemma", "Georgia", "Gloria", "Grace", "Hannah", "Harper"
       },
       Helper.EnglishFemaleFirstNames);
+    Assert.Equal(118, Helper.EnglishFemaleFirstNames.Length);
+    Assert.Equal(
+      Helper.EnglishFemaleFirstNames.Length,
+      Helper.EnglishFemaleFirstNames.Distinct(StringComparer.OrdinalIgnoreCase).Count());
   }
 
   [Fact]
