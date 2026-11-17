@@ -95,13 +95,21 @@
                         <TextBlock Text="✦" FontSize="18" Foreground="{StaticResource Accent}"/>
                     </Border>
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Fred Mockup Data Studio" FontSize="24" FontWeight="Bold"/>
-                        <TextBlock Text="Créez des jeux de données réalistes en quelques clics." Foreground="{StaticResource Muted}" Margin="0,4,0,0"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{DynamicResource AppTitle}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="LanguageComboBox" Width="110" Margin="12,0,0,0"
+                                      VerticalAlignment="Center" SelectedIndex="0"
+                                      SelectionChanged="LanguageComboBox_SelectionChanged">
+                                <ComboBoxItem Content="Français"/>
+                                <ComboBoxItem Content="English"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <TextBlock Text="{DynamicResource Subtitle}" Foreground="{StaticResource Muted}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
             <Border Grid.Column="1" Background="#EAF7F2" CornerRadius="16" Padding="12,7" VerticalAlignment="Center">
-                <TextBlock Text="●  Générateur local" Foreground="#258468" FontSize="12" FontWeight="SemiBold"/>
+                <TextBlock Text="{DynamicResource LocalGenerator}" Foreground="#258468" FontSize="12" FontWeight="SemiBold"/>
             </Border>
         </Grid>
 
@@ -120,10 +128,10 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <TextBlock Text="1. Définissez votre schéma" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Text="Ajoutez les colonnes à générer et choisissez un type de donnée pour chacune." Foreground="{StaticResource Muted}" Margin="0,5,0,0"/>
+                        <TextBlock Text="{DynamicResource SchemaTitle}" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="{DynamicResource SchemaDescription}" Foreground="{StaticResource Muted}" Margin="0,5,0,0"/>
                     </StackPanel>
-                    <Button Grid.Column="1" Content="+  Ajouter un champ" Style="{StaticResource SecondaryButton}" Click="AddField_Click"/>
+                    <Button Grid.Column="1" Content="{DynamicResource AddField}" Style="{StaticResource SecondaryButton}" Click="AddField_Click"/>
                 </Grid>
 
                 <DataGrid x:Name="FieldsGrid"
@@ -144,18 +152,20 @@
                           BorderThickness="1"
                           FontSize="13">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="NOM DU CHAMP" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
-                        <DataGridTemplateColumn Header="TYPE DE DONNÉE" Width="2*">
+                        <DataGridTextColumn Header="{DynamicResource FieldName}" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
+                        <DataGridTemplateColumn Header="{DynamicResource DataType}" Width="2*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <ComboBox ItemsSource="{Binding DataContext.FieldTypes, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                              SelectedItem="{Binding Type, UpdateSourceTrigger=PropertyChanged}"
+                                              DisplayMemberPath="Label"
+                                              SelectedValuePath="Key"
+                                              SelectedValue="{Binding Type, UpdateSourceTrigger=PropertyChanged}"
                                               BorderThickness="0"
                                               Background="Transparent"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="EXEMPLE" Binding="{Binding Example}" IsReadOnly="True" Width="2*"/>
+                        <DataGridTextColumn Header="{DynamicResource Example}" Binding="{Binding Example}" IsReadOnly="True" Width="2*"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
@@ -168,10 +178,10 @@
                         <ColumnDefinition Width="12"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Button Content="−  Supprimer le champ" Style="{StaticResource SecondaryButton}" Click="RemoveField_Click" Padding="14,9"/>
-                    <TextBlock Grid.Column="2" Text="Nombre de lignes" VerticalAlignment="Center" Margin="18,0,10,0" FontWeight="SemiBold"/>
+                    <Button Content="{DynamicResource RemoveField}" Style="{StaticResource SecondaryButton}" Click="RemoveField_Click" Padding="14,9"/>
+                    <TextBlock Grid.Column="2" Text="{DynamicResource RowCount}" VerticalAlignment="Center" Margin="18,0,10,0" FontWeight="SemiBold"/>
                     <TextBox x:Name="RowCountTextBox" Grid.Column="3" Text="100" MaxLength="7"/>
-                    <Button Grid.Column="5" Content="Générer l’aperçu  →" Style="{StaticResource PrimaryButton}" Click="Generate_Click"/>
+                    <Button Grid.Column="5" Content="{DynamicResource GeneratePreview}" Style="{StaticResource PrimaryButton}" Click="Generate_Click"/>
                 </Grid>
             </Grid>
         </Border>
@@ -188,8 +198,8 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <TextBlock Text="2. Aperçu des données" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock x:Name="PreviewStatusText" Text="Configurez vos champs puis générez un aperçu." Foreground="{StaticResource Muted}" Margin="0,5,0,0"/>
+                        <TextBlock Text="{DynamicResource PreviewTitle}" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock x:Name="PreviewStatusText" Text="{DynamicResource InitialPreviewStatus}" Foreground="{StaticResource Muted}" Margin="0,5,0,0"/>
                     </StackPanel>
                     <Border Grid.Column="1" Background="#F1F4F9" CornerRadius="6" Padding="10,6" VerticalAlignment="Center">
                         <TextBlock x:Name="ColumnCountText" Text="0 champ" Foreground="#64728A" FontSize="12"/>
@@ -229,18 +239,18 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="3." Foreground="{StaticResource Accent}" FontWeight="Bold" Margin="0,0,8,0"/>
-                    <TextBlock Text="Exporter en CSV" FontWeight="SemiBold"/>
-                    <TextBlock Text="  ·  Fichier compatible avec votre base de données" Foreground="{StaticResource Muted}"/>
+                    <TextBlock Text="{DynamicResource ExportTitle}" Foreground="{StaticResource Accent}" FontWeight="Bold" Margin="0,0,8,0"/>
+                    <TextBlock Text="{DynamicResource ExportLabel}" FontWeight="SemiBold"/>
+                    <TextBlock Text="{DynamicResource ExportDescription}" Foreground="{StaticResource Muted}"/>
                 </StackPanel>
-                <TextBlock Grid.Column="1" Text="Séparateur" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{StaticResource Muted}"/>
+                <TextBlock Grid.Column="1" Text="{DynamicResource Separator}" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{StaticResource Muted}"/>
                 <ComboBox x:Name="SeparatorComboBox" Grid.Column="2" SelectedIndex="0">
-                    <ComboBoxItem Content="Virgule  ,"/>
-                    <ComboBoxItem Content="Point-virgule  ;"/>
-                    <ComboBoxItem Content="Tabulation"/>
-                    <ComboBoxItem Content="Barre verticale  |"/>
+                    <ComboBoxItem Content="{DynamicResource Comma}"/>
+                    <ComboBoxItem Content="{DynamicResource Semicolon}"/>
+                    <ComboBoxItem Content="{DynamicResource Tab}"/>
+                    <ComboBoxItem Content="{DynamicResource Pipe}"/>
                 </ComboBox>
-                <Button Grid.Column="4" Content="↓  Exporter le CSV" Style="{StaticResource PrimaryButton}" Click="Export_Click"/>
+                <Button Grid.Column="4" Content="{DynamicResource ExportButton}" Style="{StaticResource PrimaryButton}" Click="Export_Click"/>
             </Grid>
         </Border>
     </Grid>

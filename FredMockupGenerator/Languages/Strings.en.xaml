@@ -1,0 +1,66 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <sys:String x:Key="AppTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Fred Mockup Data Studio</sys:String>
+    <sys:String x:Key="Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Create realistic datasets in just a few clicks.</sys:String>
+    <sys:String x:Key="LocalGenerator" xmlns:sys="clr-namespace:System;assembly=mscorlib">●  Local generator</sys:String>
+    <sys:String x:Key="SchemaTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">1. Define your schema</sys:String>
+    <sys:String x:Key="SchemaDescription" xmlns:sys="clr-namespace:System;assembly=mscorlib">Add the columns to generate and choose a data type for each one.</sys:String>
+    <sys:String x:Key="AddField" xmlns:sys="clr-namespace:System;assembly=mscorlib">+  Add field</sys:String>
+    <sys:String x:Key="FieldName" xmlns:sys="clr-namespace:System;assembly=mscorlib">FIELD NAME</sys:String>
+    <sys:String x:Key="DataType" xmlns:sys="clr-namespace:System;assembly=mscorlib">DATA TYPE</sys:String>
+    <sys:String x:Key="Example" xmlns:sys="clr-namespace:System;assembly=mscorlib">EXAMPLE</sys:String>
+    <sys:String x:Key="RemoveField" xmlns:sys="clr-namespace:System;assembly=mscorlib">−  Remove field</sys:String>
+    <sys:String x:Key="RowCount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Number of rows</sys:String>
+    <sys:String x:Key="GeneratePreview" xmlns:sys="clr-namespace:System;assembly=mscorlib">Generate preview  →</sys:String>
+    <sys:String x:Key="PreviewTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">2. Data preview</sys:String>
+    <sys:String x:Key="InitialPreviewStatus" xmlns:sys="clr-namespace:System;assembly=mscorlib">Configure your fields, then generate a preview.</sys:String>
+    <sys:String x:Key="SchemaChangedStatus" xmlns:sys="clr-namespace:System;assembly=mscorlib">The schema changed. Generate the data again to refresh the preview.</sys:String>
+    <sys:String x:Key="GeneratedStatus" xmlns:sys="clr-namespace:System;assembly=mscorlib">{0:N0} rows generated · preview ready to export.</sys:String>
+    <sys:String x:Key="ExportTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">3.</sys:String>
+    <sys:String x:Key="ExportLabel" xmlns:sys="clr-namespace:System;assembly=mscorlib">Export to CSV</sys:String>
+    <sys:String x:Key="ExportDescription" xmlns:sys="clr-namespace:System;assembly=mscorlib">  ·  File compatible with your database</sys:String>
+    <sys:String x:Key="Separator" xmlns:sys="clr-namespace:System;assembly=mscorlib">Separator</sys:String>
+    <sys:String x:Key="Comma" xmlns:sys="clr-namespace:System;assembly=mscorlib">Comma  ,</sys:String>
+    <sys:String x:Key="Semicolon" xmlns:sys="clr-namespace:System;assembly=mscorlib">Semicolon  ;</sys:String>
+    <sys:String x:Key="Tab" xmlns:sys="clr-namespace:System;assembly=mscorlib">Tab</sys:String>
+    <sys:String x:Key="Pipe" xmlns:sys="clr-namespace:System;assembly=mscorlib">Vertical bar  |</sys:String>
+    <sys:String x:Key="ExportButton" xmlns:sys="clr-namespace:System;assembly=mscorlib">↓  Export CSV</sys:String>
+    <sys:String x:Key="OneField" xmlns:sys="clr-namespace:System;assembly=mscorlib">1 field</sys:String>
+    <sys:String x:Key="ManyFields" xmlns:sys="clr-namespace:System;assembly=mscorlib">{0} fields</sys:String>
+    <sys:String x:Key="RowsInvalidMessage" xmlns:sys="clr-namespace:System;assembly=mscorlib">The number of rows must be between 1 and 100,000.</sys:String>
+    <sys:String x:Key="RowsInvalidTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Invalid row count</sys:String>
+    <sys:String x:Key="EmptySchemaMessage" xmlns:sys="clr-namespace:System;assembly=mscorlib">Add at least one field before generating data.</sys:String>
+    <sys:String x:Key="EmptySchemaTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Empty schema</sys:String>
+    <sys:String x:Key="FieldNameMissingMessage" xmlns:sys="clr-namespace:System;assembly=mscorlib">Every field must have a name.</sys:String>
+    <sys:String x:Key="FieldNameMissingTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Missing field name</sys:String>
+    <sys:String x:Key="DuplicateFieldsMessage" xmlns:sys="clr-namespace:System;assembly=mscorlib">Field names must be unique.</sys:String>
+    <sys:String x:Key="DuplicateFieldsTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Duplicate field names</sys:String>
+    <sys:String x:Key="NoDataMessage" xmlns:sys="clr-namespace:System;assembly=mscorlib">Generate the data before starting the export.</sys:String>
+    <sys:String x:Key="NoDataTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">No data to export</sys:String>
+    <sys:String x:Key="ExportDialogTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Export data as CSV</sys:String>
+    <sys:String x:Key="CsvFile" xmlns:sys="clr-namespace:System;assembly=mscorlib">CSV file (*.csv)|*.csv|All files (*.*)|*.*</sys:String>
+    <sys:String x:Key="ExportSuccessMessage" xmlns:sys="clr-namespace:System;assembly=mscorlib">{0:N0} rows exported successfully.</sys:String>
+    <sys:String x:Key="ExportSuccessTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Export complete</sys:String>
+    <sys:String x:Key="ExportErrorMessage" xmlns:sys="clr-namespace:System;assembly=mscorlib">The file could not be written.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="AccessDeniedMessage" xmlns:sys="clr-namespace:System;assembly=mscorlib">Access to the file was denied.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="ExportErrorTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Export error</sys:String>
+    <sys:String x:Key="ExportedStatus" xmlns:sys="clr-namespace:System;assembly=mscorlib">{0:N0} rows exported successfully.</sys:String>
+    <sys:String x:Key="SettingsInvalid" xmlns:sys="clr-namespace:System;assembly=mscorlib">Saved settings are invalid and will be ignored.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="SettingsReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Saved settings could not be read.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="SettingsAccessDenied" xmlns:sys="clr-namespace:System;assembly=mscorlib">Access to the saved settings was denied.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="SettingsSaveError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Application settings could not be saved.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="SettingsDirectoryAccessDenied" xmlns:sys="clr-namespace:System;assembly=mscorlib">Access to the settings folder was denied.&#10;&#10;{0}</sys:String>
+    <sys:String x:Key="SettingsTitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Application settings</sys:String>
+    <sys:String x:Key="SettingsDirectoryMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">The settings folder could not be found.</sys:String>
+    <sys:String x:Key="TypeText" xmlns:sys="clr-namespace:System;assembly=mscorlib">Text</sys:String>
+    <sys:String x:Key="TypeIdentifier" xmlns:sys="clr-namespace:System;assembly=mscorlib">Identifier</sys:String>
+    <sys:String x:Key="TypeFirstName" xmlns:sys="clr-namespace:System;assembly=mscorlib">First name</sys:String>
+    <sys:String x:Key="TypeLastName" xmlns:sys="clr-namespace:System;assembly=mscorlib">Last name</sys:String>
+    <sys:String x:Key="TypeEmail" xmlns:sys="clr-namespace:System;assembly=mscorlib">Email</sys:String>
+    <sys:String x:Key="TypeCompany" xmlns:sys="clr-namespace:System;assembly=mscorlib">Company</sys:String>
+    <sys:String x:Key="TypeCity" xmlns:sys="clr-namespace:System;assembly=mscorlib">City</sys:String>
+    <sys:String x:Key="TypePhone" xmlns:sys="clr-namespace:System;assembly=mscorlib">Phone</sys:String>
+    <sys:String x:Key="TypeDate" xmlns:sys="clr-namespace:System;assembly=mscorlib">Date</sys:String>
+    <sys:String x:Key="TypeNumber" xmlns:sys="clr-namespace:System;assembly=mscorlib">Number</sys:String>
+    <sys:String x:Key="TypeBoolean" xmlns:sys="clr-namespace:System;assembly=mscorlib">Boolean</sys:String>
+</ResourceDictionary>

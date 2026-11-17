@@ -18,18 +18,17 @@ public partial class MainWindow : Window
   private static readonly string WindowSettingsPath = Path.Combine(AppContext.BaseDirectory, "window.json");
   private readonly Random _random = new();
   private DataTable? _generatedData;
+  private bool _isInitializing = true;
+  private bool _hasSchemaChanged;
 
   public ObservableCollection<FieldDefinition> Fields { get; } = [];
 
-  public IReadOnlyList<string> FieldTypes { get; } =
-  [
-    "Texte", "Identifiant", "Prénom", "Nom", "Email", "Entreprise", "Ville",
-    "Téléphone", "Date", "Nombre", "Booléen"
-  ];
+  public ObservableCollection<FieldTypeOption> FieldTypes { get; } = [];
 
   public MainWindow()
   {
     InitializeComponent();
+    UpdateFieldTypes();
     CenterOnPrimaryScreen();
     RestoreWindowPlacement();
     AddVersionNumberToTitle();
@@ -62,8 +61,67 @@ public partial class MainWindow : Window
     Fields.Add(new FieldDefinition("nom", "Nom"));
     Fields.Add(new FieldDefinition("email", "Email"));
     Fields.Add(new FieldDefinition("ville", "Ville"));
-    PreviewStatusText.Text = "Configurez vos champs puis générez un aperçu.";
+    _isInitializing = false;
+    PreviewStatusText.Text = GetText("InitialPreviewStatus");
   }
+
+  private void LanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+  {
+    if (!IsInitialized)
+    {
+      return;
+    }
+
+    var language = LanguageComboBox.SelectedIndex == 1 ? "en" : "fr";
+    var dictionary = new ResourceDictionary
+    {
+      Source = new Uri($"/FredMockupGenerator;component/Languages/Strings.{language}.xaml", UriKind.Relative)
+    };
+
+    Application.Current.Resources.MergedDictionaries.Clear();
+    Application.Current.Resources.MergedDictionaries.Add(dictionary);
+    UpdateFieldTypes();
+    UpdateColumnCount();
+    SetPreviewStatus();
+  }
+
+  private void UpdateFieldTypes()
+  {
+    FieldTypeOption[] fieldTypes =
+    [
+      new("Texte", GetText("TypeText")),
+      new("Identifiant", GetText("TypeIdentifier")),
+      new("Prénom", GetText("TypeFirstName")),
+      new("Nom", GetText("TypeLastName")),
+      new("Email", GetText("TypeEmail")),
+      new("Entreprise", GetText("TypeCompany")),
+      new("Ville", GetText("TypeCity")),
+      new("Téléphone", GetText("TypePhone")),
+      new("Date", GetText("TypeDate")),
+      new("Nombre", GetText("TypeNumber")),
+      new("Booléen", GetText("TypeBoolean"))
+    ];
+
+    if (FieldTypes.Count == 0)
+    {
+      foreach (var fieldType in fieldTypes)
+      {
+        FieldTypes.Add(fieldType);
+      }
+
+      return;
+    }
+
+    for (var index = 0; index < fieldTypes.Length; index++)
+    {
+      FieldTypes[index] = fieldTypes[index];
+    }
+  }
+
+  private static string GetText(string key) => (string)Application.Current.FindResource(key);
+
+  private static string FormatText(string key, params object[] arguments) =>
+    string.Format(CultureInfo.CurrentCulture, GetText(key), arguments);
 
   private void RestoreWindowPlacement()
   {
@@ -79,17 +137,17 @@ public partial class MainWindow : Window
     }
     catch (JsonException exception)
     {
-      ShowWindowSettingsWarning($"Les paramètres enregistrés sont invalides et seront ignorés.\n\n{exception.Message}");
+      ShowWindowSettingsWarning(FormatText("SettingsInvalid", exception.Message));
       return;
     }
     catch (IOException exception)
     {
-      ShowWindowSettingsWarning($"Les paramètres enregistrés n’ont pas pu être lus.\n\n{exception.Message}");
+      ShowWindowSettingsWarning(FormatText("SettingsReadError", exception.Message));
       return;
     }
     catch (UnauthorizedAccessException exception)
     {
-      ShowWindowSettingsWarning($"L’accès aux paramètres enregistrés est refusé.\n\n{exception.Message}");
+      ShowWindowSettingsWarning(FormatText("SettingsAccessDenied", exception.Message));
       return;
     }
 
@@ -167,17 +225,17 @@ public partial class MainWindow : Window
     try
     {
       var directory = Path.GetDirectoryName(WindowSettingsPath)
-        ?? throw new InvalidOperationException("Le dossier des paramètres est introuvable.");
+        ?? throw new InvalidOperationException(GetText("SettingsDirectoryMissing"));
       Directory.CreateDirectory(directory);
       File.WriteAllText(WindowSettingsPath, JsonSerializer.Serialize(placement));
     }
     catch (IOException exception)
     {
-      ShowWindowSettingsWarning($"Les paramètres de l’application n’ont pas pu être sauvegardés.\n\n{exception.Message}");
+      ShowWindowSettingsWarning(FormatText("SettingsSaveError", exception.Message));
     }
     catch (UnauthorizedAccessException exception)
     {
-      ShowWindowSettingsWarning($"L’accès au dossier des paramètres est refusé.\n\n{exception.Message}");
+      ShowWindowSettingsWarning(FormatText("SettingsDirectoryAccessDenied", exception.Message));
     }
   }
 
@@ -200,7 +258,7 @@ public partial class MainWindow : Window
 
   private void ShowWindowSettingsWarning(string message)
   {
-    MessageBox.Show(this, message, "Paramètres de l’application",
+    MessageBox.Show(this, message, GetText("SettingsTitle"),
       MessageBoxButton.OK, MessageBoxImage.Warning);
   }
 
@@ -242,30 +300,30 @@ public partial class MainWindow : Window
 
     if (!int.TryParse(RowCountTextBox.Text, out var rowCount) || rowCount < 1 || rowCount > 100_000)
     {
-      MessageBox.Show(this, "Le nombre de lignes doit être compris entre 1 et 100 000.",
-        "Nombre de lignes invalide", MessageBoxButton.OK, MessageBoxImage.Warning);
+      MessageBox.Show(this, GetText("RowsInvalidMessage"),
+        GetText("RowsInvalidTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
       return;
     }
 
     if (Fields.Count == 0)
     {
-      MessageBox.Show(this, "Ajoutez au moins un champ avant de générer les données.",
-        "Schéma vide", MessageBoxButton.OK, MessageBoxImage.Warning);
+      MessageBox.Show(this, GetText("EmptySchemaMessage"),
+        GetText("EmptySchemaTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
       return;
     }
 
     var fieldNames = Fields.Select(field => field.Name.Trim()).ToArray();
     if (fieldNames.Any(string.IsNullOrWhiteSpace))
     {
-      MessageBox.Show(this, "Chaque champ doit avoir un nom.",
-        "Nom de champ manquant", MessageBoxButton.OK, MessageBoxImage.Warning);
+      MessageBox.Show(this, GetText("FieldNameMissingMessage"),
+        GetText("FieldNameMissingTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
       return;
     }
 
     if (fieldNames.Distinct(StringComparer.OrdinalIgnoreCase).Count() != fieldNames.Length)
     {
-      MessageBox.Show(this, "Les noms des champs doivent être uniques.",
-        "Noms de champs en double", MessageBoxButton.OK, MessageBoxImage.Warning);
+      MessageBox.Show(this, GetText("DuplicateFieldsMessage"),
+        GetText("DuplicateFieldsTitle"), MessageBoxButton.OK, MessageBoxImage.Warning);
       return;
     }
 
@@ -288,22 +346,22 @@ public partial class MainWindow : Window
 
     _generatedData = table;
     PreviewGrid.ItemsSource = table.DefaultView;
-    PreviewStatusText.Text = $"{rowCount:N0} lignes générées · aperçu prêt à être exporté.";
+    SetPreviewStatus();
   }
 
   private void Export_Click(object sender, RoutedEventArgs e)
   {
     if (_generatedData is null || _generatedData.Rows.Count == 0)
     {
-      MessageBox.Show(this, "Générez d’abord les données avant de lancer l’export.",
-        "Aucune donnée à exporter", MessageBoxButton.OK, MessageBoxImage.Information);
+      MessageBox.Show(this, GetText("NoDataMessage"),
+        GetText("NoDataTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
       return;
     }
 
     var dialog = new SaveFileDialog
     {
-      Title = "Exporter les données au format CSV",
-      Filter = "Fichier CSV (*.csv)|*.csv|Tous les fichiers (*.*)|*.*",
+      Title = GetText("ExportDialogTitle"),
+      Filter = GetText("CsvFile"),
       DefaultExt = ".csv",
       AddExtension = true,
       FileName = $"Generated_data_{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture)}.csv"
@@ -325,18 +383,18 @@ public partial class MainWindow : Window
         WriteCsvRow(writer, row.ItemArray.Select(value => value?.ToString() ?? string.Empty), separator);
       }
 
-      MessageBox.Show(this, $"{_generatedData.Rows.Count:N0} lignes exportées avec succès.",
-        "Export terminé", MessageBoxButton.OK, MessageBoxImage.Information);
+      MessageBox.Show(this, FormatText("ExportSuccessMessage", _generatedData.Rows.Count),
+        GetText("ExportSuccessTitle"), MessageBoxButton.OK, MessageBoxImage.Information);
     }
     catch (IOException exception)
     {
-      MessageBox.Show(this, $"Le fichier n’a pas pu être écrit.\n\n{exception.Message}",
-        "Erreur d’export", MessageBoxButton.OK, MessageBoxImage.Error);
+      MessageBox.Show(this, FormatText("ExportErrorMessage", exception.Message),
+        GetText("ExportErrorTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
     }
     catch (UnauthorizedAccessException exception)
     {
-      MessageBox.Show(this, $"L’accès au fichier est refusé.\n\n{exception.Message}",
-        "Erreur d’export", MessageBoxButton.OK, MessageBoxImage.Error);
+      MessageBox.Show(this, FormatText("AccessDeniedMessage", exception.Message),
+        GetText("ExportErrorTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
     }
   }
 
@@ -365,16 +423,11 @@ public partial class MainWindow : Window
 
   private string GetSelectedSeparator()
   {
-    if (SeparatorComboBox.SelectedItem is not ComboBoxItem item)
+    return SeparatorComboBox.SelectedIndex switch
     {
-      return ",";
-    }
-
-    return item.Content?.ToString() switch
-    {
-      "Point-virgule  ;" => ";",
-      "Tabulation" => "\t",
-      "Barre verticale  |" => "|",
+      1 => ";",
+      2 => "\t",
+      3 => "|",
       _ => ","
     };
   }
@@ -397,11 +450,29 @@ public partial class MainWindow : Window
   {
     _generatedData = null;
     PreviewGrid.ItemsSource = null;
-    PreviewStatusText.Text = "Le schéma a changé. Générez à nouveau les données pour actualiser l’aperçu.";
+    if (!_isInitializing)
+    {
+      _hasSchemaChanged = true;
+    }
+
+    SetPreviewStatus();
+  }
+
+  private void SetPreviewStatus()
+  {
+    PreviewStatusText.Text = _generatedData is not null
+      ? FormatText("GeneratedStatus", _generatedData.Rows.Count)
+      : _hasSchemaChanged
+        ? GetText("SchemaChangedStatus")
+        : GetText("InitialPreviewStatus");
   }
 
   private void UpdateColumnCount()
   {
-    ColumnCountText.Text = Fields.Count == 1 ? "1 champ" : $"{Fields.Count} champs";
+    ColumnCountText.Text = Fields.Count == 1
+      ? GetText("OneField")
+      : FormatText("ManyFields", Fields.Count);
   }
 }
+
+public sealed record FieldTypeOption(string Key, string Label);
