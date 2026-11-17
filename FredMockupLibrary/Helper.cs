@@ -88,7 +88,17 @@ namespace FredMockupLibrary
     [
       "James", "John", "Robert", "Michael", "William", "David", "Richard",
       "Thomas", "Charles", "Christopher", "Daniel", "Matthew", "Anthony",
-      "Donald", "Mark", "Steven", "Paul", "Andrew"
+      "Donald", "Mark", "Steven", "Paul", "Andrew",
+      "Aaron", "Adam", "Adrian", "Alan", "Albert", "Alec", "Alexander", "Alfred", "Allen", "Alvin",
+      "Amos", "Andre", "Angel", "Arnold", "Arthur", "Ashton", "Austin", "Barry", "Benjamin", "Blake",
+      "Brandon", "Bradley", "Brian", "Bruce", "Caleb", "Cameron", "Carl", "Carlos", "Carter", "Casey",
+      "Chad", "Christian", "Clarence", "Clifford", "Cody", "Colin", "Connor", "Craig", "Curtis", "Dale",
+      "Damian", "Darren", "Dean", "Dennis", "Derek", "Devin", "Dominic", "Douglas", "Dylan", "Earl",
+      "Edward", "Elijah", "Elliot", "Eric", "Ethan", "Eugene", "Evan", "Everett", "Francis", "Frank",
+      "Frederick", "Gabriel", "Gavin", "George", "Gerald", "Gilbert", "Glenn", "Gordon", "Grant", "Gregory",
+      "Harold", "Harry", "Harvey", "Henry", "Howard", "Ian", "Isaac", "Jack", "Jacob", "Jake",
+      "Jason", "Jeffrey", "Jeremy", "Jesse", "Joel", "Jordan", "Joseph", "Joshua", "Justin", "Keith",
+      "Kenneth", "Kevin", "Kyle", "Lawrence", "Leo", "Leonard", "Lewis", "Logan", "Louis", "Luke"
     ];
 
     public static readonly string[] EnglishFemaleFirstNames =
