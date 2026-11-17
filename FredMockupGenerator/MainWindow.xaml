@@ -1,7 +1,7 @@
 <Window x:Class="FredMockupGenerator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="FredMock Data Studio"
+        Title="FredMockup Data Studio"
         Width="1280"
         Height="820"
         MinWidth="980"
@@ -95,7 +95,7 @@
                         <TextBlock Text="✦" FontSize="18" Foreground="{StaticResource Accent}"/>
                     </Border>
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Fred Mock Data Studio" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock Text="Fred Mockup Data Studio" FontSize="24" FontWeight="Bold"/>
                         <TextBlock Text="Créez des jeux de données réalistes en quelques clics." Foreground="{StaticResource Muted}" Margin="0,4,0,0"/>
                     </StackPanel>
                 </StackPanel>

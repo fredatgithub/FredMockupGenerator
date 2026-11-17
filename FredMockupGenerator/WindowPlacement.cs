@@ -9,5 +9,6 @@ public partial class MainWindow
     public double Width { get; set; }
     public double Height { get; set; }
     public bool IsMaximized { get; set; }
+    public string? Separator { get; set; }
   }
 }

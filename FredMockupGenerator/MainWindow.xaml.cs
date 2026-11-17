@@ -79,21 +79,28 @@ public partial class MainWindow : Window
     }
     catch (JsonException exception)
     {
-      ShowWindowSettingsWarning($"Les paramètres de position de la fenêtre sont invalides et seront ignorés.\n\n{exception.Message}");
+      ShowWindowSettingsWarning($"Les paramètres enregistrés sont invalides et seront ignorés.\n\n{exception.Message}");
       return;
     }
     catch (IOException exception)
     {
-      ShowWindowSettingsWarning($"Les paramètres de position de la fenêtre n’ont pas pu être lus.\n\n{exception.Message}");
+      ShowWindowSettingsWarning($"Les paramètres enregistrés n’ont pas pu être lus.\n\n{exception.Message}");
       return;
     }
     catch (UnauthorizedAccessException exception)
     {
-      ShowWindowSettingsWarning($"L’accès aux paramètres de position de la fenêtre est refusé.\n\n{exception.Message}");
+      ShowWindowSettingsWarning($"L’accès aux paramètres enregistrés est refusé.\n\n{exception.Message}");
       return;
     }
 
-    if (placement is null || !IsPlacementVisible(placement))
+    if (placement is null)
+    {
+      return;
+    }
+
+    RestoreSeparator(placement.Separator);
+
+    if (!IsPlacementVisible(placement))
     {
       return;
     }
@@ -153,7 +160,8 @@ public partial class MainWindow : Window
       Top = bounds.Top,
       Width = bounds.Width,
       Height = bounds.Height,
-      IsMaximized = WindowState == WindowState.Maximized
+      IsMaximized = WindowState == WindowState.Maximized,
+      Separator = GetSelectedSeparator()
     };
 
     try
@@ -165,7 +173,7 @@ public partial class MainWindow : Window
     }
     catch (IOException exception)
     {
-      ShowWindowSettingsWarning($"La position de la fenêtre n’a pas pu être sauvegardée.\n\n{exception.Message}");
+      ShowWindowSettingsWarning($"Les paramètres de l’application n’ont pas pu être sauvegardés.\n\n{exception.Message}");
     }
     catch (UnauthorizedAccessException exception)
     {
@@ -173,9 +181,26 @@ public partial class MainWindow : Window
     }
   }
 
+  private void RestoreSeparator(string? separator)
+  {
+    var selectedIndex = separator switch
+    {
+      "," => 0,
+      ";" => 1,
+      "\t" => 2,
+      "|" => 3,
+      _ => -1
+    };
+
+    if (selectedIndex >= 0)
+    {
+      SeparatorComboBox.SelectedIndex = selectedIndex;
+    }
+  }
+
   private void ShowWindowSettingsWarning(string message)
   {
-    MessageBox.Show(this, message, "Paramètres de la fenêtre",
+    MessageBox.Show(this, message, "Paramètres de l’application",
       MessageBoxButton.OK, MessageBoxImage.Warning);
   }
 
