@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Data\FrenchCities.txt" LogicalName="FredMockupLibrary.Data.FrenchCities.txt" />
     <EmbeddedResource Include="Data\UsCities.txt" LogicalName="FredMockupLibrary.Data.UsCities.txt" />
   </ItemGroup>
 
