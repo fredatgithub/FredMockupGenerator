@@ -29,5 +29,33 @@ namespace FredMockupLibrary
       "Paris", "Lyon", "Bordeaux", "Nantes", "Lille", "Toulouse",
     "Strasbourg", "Montpellier", "Rennes", "Grenoble"
     ];
+
+    public static readonly string[] EnglishMaleFirstNames =
+    [
+      "James", "John", "Robert", "Michael", "William", "David", "Richard"
+    ];
+
+    public static readonly string[] EnglishFemaleFirstNames =
+      [
+      "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan"
+      ];
+
+    public static readonly string[] EnglishLastNames =
+      [
+      "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller"
+      ];
+
+    public static readonly string[] UsCities = [
+      "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio"
+      ];
+
+    public static readonly string[] UsCounties = [
+      "Los Angeles County", "Cook County", "Harris County", "Maricopa County", "San Diego County", "Orange County", "Miami-Dade County"
+      ];
+
+    public static readonly string[] UsStates = [
+      "California", "Texas", "Florida", "New York", "Pennsylvania", "Illinois", "Ohio"
+      ];
+
   }
 }
