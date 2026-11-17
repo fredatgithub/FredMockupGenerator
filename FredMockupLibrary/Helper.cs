@@ -59,11 +59,8 @@ namespace FredMockupLibrary
       "Harris", "Martin", "Thompson", "Garcia"
     ];
 
-    public static readonly string[] UsCities =
-    [
-      "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio",
-      "San Diego", "Dallas", "San Jose", "Austin", "Jacksonville", "Fort Worth", "Columbus"
-    ];
+    // Unique names from the 2026 Census Gazetteer for active incorporated places.
+    public static readonly string[] UsCities = LoadUsCities();
 
     public static readonly string[] UsCounties =
     [
@@ -87,5 +84,25 @@ namespace FredMockupLibrary
       "West Virginia", "Wisconsin", "Wyoming"
     ];
 
+    private static string[] LoadUsCities()
+    {
+      const string resourceName = "FredMockupLibrary.Data.UsCities.txt";
+      using var stream = typeof(Helper).Assembly.GetManifestResourceStream(resourceName)
+        ?? throw new InvalidOperationException($"Embedded resource '{resourceName}' was not found.");
+      using var reader = new StreamReader(stream);
+
+      var names = new List<string>();
+      while (reader.ReadLine() is { } name)
+      {
+        names.Add(name);
+      }
+
+      if (names.Count == 0)
+      {
+        throw new InvalidOperationException($"Embedded resource '{resourceName}' contains no place names.");
+      }
+
+      return names.ToArray();
+    }
   }
 }

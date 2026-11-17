@@ -114,14 +114,13 @@ public class HelperTests
   [Fact]
   public void UsCities_ContainsExpectedCities()
   {
+    Assert.Equal(12662, Helper.UsCities.Length);
     Assert.Equal(
-      new[]
-      {
-        "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia",
-        "San Antonio", "San Diego", "Dallas", "San Jose", "Austin", "Jacksonville",
-        "Fort Worth", "Columbus"
-      },
+      Helper.UsCities.OrderBy(name => name, StringComparer.OrdinalIgnoreCase),
       Helper.UsCities);
+    Assert.Contains("New York", Helper.UsCities);
+    Assert.Contains("Los Angeles", Helper.UsCities);
+    Assert.Contains("San Juan", Helper.UsCities);
   }
 
   [Fact]
